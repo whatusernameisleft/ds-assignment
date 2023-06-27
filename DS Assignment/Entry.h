@@ -1,14 +1,14 @@
 #pragma once
-#include <iostream>
 #include <string>
 #include <list>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 
 class Entry {
-	int id;
 	string name;
 	int year;
 	int rent;
@@ -86,17 +86,97 @@ class Entry {
 		return columns;
 	}
 
+	void setId(string col) {
+		id = atoi(col.c_str());
+	}
+
+	void setName(string col) {
+		name = col;
+	}
+
+	void setYear(string col) {
+		year = atoi(col.c_str());
+	}
+
+	void setRent(string col) {
+		col.erase(0, 3);
+		col.erase(remove(col.begin(), col.end(), ' '), col.end());
+		rent = atoi(col.c_str());
+	}
+
+	void setRegionAndLocation(string col) {
+		size_t pos = col.find(" - ");
+		region = col.substr(0, pos);
+		col.erase(0, pos + 3);
+		location = col;
+	}
+
+	void setType(string col) {
+		type = col;
+	}
+
+	void setRooms(string col) {
+		rooms = atoi(col.c_str());
+	}
+
+	void setParking(string col) {
+		parking = atoi(col.c_str());
+	}
+
+	void setBathrooms(string col) {
+		bathrooms = atoi(col.c_str());
+	}
+
+	void setSize(string col) {
+		size = atoi(col.c_str());
+	}
+
+	void setFurnished(string col) {
+		furnished = col;
+	}
+
+	void setFacilities(string col) {
+		facilities = col;
+	}
+
+	void setAdditionalFacilities(string col) {
+		additionalFacilities = col;
+	}
+	
+	void setDetails(vector<string> columns) {
+		setId(columns[0]);
+		setName(columns[1]);
+		setYear(columns[2]);
+		setRent(columns[3]);
+		setRegionAndLocation(columns[4]);
+		setType(columns[5]);
+		setRooms(columns[6]);
+		setParking(columns[7]);
+		setBathrooms(columns[8]);
+		setSize(columns[9]);
+		setFurnished(columns[10]);
+		setFacilities(columns[11]);
+		setAdditionalFacilities(columns[12]);
+	}
+
 	void initEntry(string row) {
 		vector<string> columns = getColumns(row);
-
-		for (string col : columns) {
-			cout << col << endl;
-		}
+		setDetails(columns);
 	}
 
 	public:
+		int id;
 		Entry(string row) {
 			initEntry(row);
 		}
 
+		int getId() {
+			return id;
+		}
+};
+
+struct EntryHashFunction {
+	size_t operator()(const Entry &e) const {
+		return (size_t) e.id;
+	}
 };
