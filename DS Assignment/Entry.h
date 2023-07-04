@@ -162,6 +162,7 @@ class Entry {
 	void initEntry(string row) {
 		vector<string> columns = getColumns(row);
 		setDetails(columns);
+		for (string col : columns) cout << col << endl;
 	}
 
 	public:
