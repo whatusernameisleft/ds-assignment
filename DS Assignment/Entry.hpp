@@ -5,10 +5,12 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <unordered_map>
+#include "Trim.h"
 
 using namespace std;
 
-class Entry {
+struct Entry {
 	string name;
 	int year;
 	int rent;
@@ -29,6 +31,7 @@ class Entry {
 		vector<string> sections;
 
 		while (getline(s, section, delim)) {
+			trim(section);
 			sections.push_back(section);
 		}
 
@@ -135,15 +138,72 @@ class Entry {
 		furnished = col;
 	}
 
-	void setFacilities(string col) {
-		facilities = col;
+	//vector<char> mapFacilities(vector<string> facs, char &character, unordered_map<string, char> &facilityMap) {
+	//	vector<char> facChars = 
+	//}
+
+	bool isInMap(unordered_map<char, string> map, string value) {
+		vector<string> values;
+		for (unordered_map<char, string>::iterator it = map.begin(); it != map.end(); ++it) {
+			values.push_back(it->second);
+		}
+		if (find(values.begin(), values.end(), value) != values.end()) {
+			return true;
+		}
+		return false;
+	}
+
+	char getChar(unordered_map<char, string> map, string value) {
+		for (auto const &i : map) {
+			if (i.second == value) {
+				return i.first;
+			}
+		}
+		return ' ';
+	}
+
+	/*vector<string> get_all_selections(vector<char> arr) {
+		vector<string> selections;
+		selections.push_back("");
+		for (int i = 0; i < arr.size(); i++) {
+			int size = selections.size();
+			for (int j = 0; j < size; j++) {
+				string new_selection = selections[j] + arr[i];
+				selections.push_back(new_selection);
+			}
+		}
+		return selections;
+	}
+
+	void setCombinations(unordered_map<string, vector<int>> &combinationMap) {
+		vector<string> selections = get_all_selections(facilities);
+		for (string selection : selections) {
+			combinationMap[selection].push_back(id);
+		}
+	}*/
+
+	void setFacilities(string col, char &character, unordered_map<char, string> &facilityMap, unordered_map<string, vector<int>> &combinationMap) {
+		vector<string> facs = separateSections(col, ',');
+		for (string facility : facs) {
+			char c;
+			if (isInMap(facilityMap, facility)) c = getChar(facilityMap, facility);
+			else {
+				facilityMap[character] = facility;
+				c = character;
+				character++;
+			}
+			facilities.push_back(c);
+		}
+		sort(facilities.begin(), facilities.end());
+		cout << facilities << endl;
+		//setCombinations(combinationMap);
 	}
 
 	void setAdditionalFacilities(string col) {
 		additionalFacilities = col;
 	}
 	
-	void setDetails(vector<string> columns) {
+	void setDetails(vector<string> columns, char &character, unordered_map<char, string> &facilityMap, unordered_map<string, vector<int>> &combinationMap) {
 		setId(columns[0]);
 		setName(columns[1]);
 		setYear(columns[2]);
@@ -155,29 +215,21 @@ class Entry {
 		setBathrooms(columns[8]);
 		setSize(columns[9]);
 		setFurnished(columns[10]);
-		setFacilities(columns[11]);
+		setFacilities(columns[11], character, facilityMap, combinationMap);
 		setAdditionalFacilities(columns[12]);
 	}
 
-	void initEntry(string row) {
+	void initEntry(string row, char &character, unordered_map<char, string> &facilityMap, unordered_map<string, vector<int>> &combinationMap) {
 		vector<string> columns = getColumns(row);
-		setDetails(columns);
-		for (string col : columns) cout << col << endl;
+		setDetails(columns, character, facilityMap, combinationMap);
 	}
 
-	public:
-		int id;
-		Entry(string row) {
-			initEntry(row);
-		}
+	int id;
+	Entry(string row, char &character, unordered_map<char, string> &facilityMap, unordered_map<string, vector<int>> &combinationMap) {
+		initEntry(row, character, facilityMap, combinationMap);
+	}
 
-		int getId() {
-			return id;
-		}
-};
-
-struct EntryHashFunction {
-	size_t operator()(const Entry &e) const {
-		return (size_t) e.id;
+	int getId() {
+		return id;
 	}
 };
