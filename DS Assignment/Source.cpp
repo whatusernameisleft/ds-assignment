@@ -125,6 +125,125 @@ void printArray(int array[], int size) {
 	cout << endl;
 }
 
+static void RadixSort256(unsigned int *arr, int n)
+{
+	if (n <= 1) return; // Added base case
+
+	unsigned int *output = new unsigned int[n]; // output array
+	int *count = new int[256];
+	unsigned int *originalArr = arr; // So we know which was input
+
+	for (int shift = 0, s = 0; shift < 4; shift++, s += 8)
+	{
+		// Zero the counts
+		for (int i = 0; i < 256; i++)
+			count[i] = 0;
+
+		// Store count of occurrences in count[] 
+		for (int i = 0; i < n; i++)
+			count[(arr[i] >> s) & 0xff]++;
+
+		// Change count[i] so that count[i] now contains 
+		// actual position of this digit in output[] 
+		for (int i = 1; i < 256; i++)
+			count[i] += count[i - 1];
+
+		// Build the output array 
+		for (int i = n - 1; i >= 0; i--)
+		{
+			// precalculate the offset as it's a few instructions
+			int idx = (arr[i] >> s) & 0xff;
+
+			// Subtract from the count and store the value
+			output[--count[idx]] = arr[i];
+		}
+
+		// Copy the output array to input[], so that input[] 
+		// is sorted according to current digit
+
+		// We can just swap the pointers
+		unsigned int *tmp = arr;
+		arr = output;
+		output = tmp;
+	}
+
+	// If we switched pointers an odd number of times,
+	// make sure we copy before returning
+	if (originalArr == output)
+	{
+		unsigned int *tmp = arr;
+		arr = output;
+		output = tmp;
+
+		for (int i = 0; i < n; i++)
+			arr[i] = output[i];
+	}
+
+	delete[] output;
+	delete[] count;
+}
+
+int partition(int arr[], int low, int high)
+{
+	// pivot
+	int pivot = arr[high];
+
+	// Index of smaller element
+	int i = (low - 1);
+
+	for (int j = low; j <= high - 1; j++)
+	{
+		// If current element is smaller
+		// than or equal to pivot
+		if (arr[j] <= pivot) {
+
+			// increment index of
+			// smaller element
+			i++;
+			swap(arr[i], arr[j]);
+		}
+	}
+	swap(arr[i + 1], arr[high]);
+	return (i + 1);
+}
+
+// Generates Random Pivot, swaps pivot with
+// end element and calls the partition function
+int partition_r(int arr[], int low, int high)
+{
+	// Generate a random number in between
+	// low .. high
+	srand(time(NULL));
+	cout << low << " " << high << endl;
+	int random = low + rand() % (high - low);
+
+	// Swap A[random] with A[high]
+	swap(arr[random], arr[high]);
+
+	return partition(arr, low, high);
+}
+
+/* The main function that implements
+QuickSort
+arr[] --> Array to be sorted,
+low --> Starting index,
+high --> Ending index */
+void quickSort(int arr[], int low, int high)
+{
+	if (low < high) {
+
+		/* pi is partitioning index,
+		arr[p] is now
+		at right place */
+		int pi = partition_r(arr, low, high);
+
+		// Separately sort elements before
+		// partition and after partition
+		quickSort(arr, low, pi - 1);
+		quickSort(arr, pi + 1, high);
+	}
+}
+
 int main() {
 	char firstChar = 'a';
 	unordered_map<char, string> facilityMap;
@@ -133,6 +252,7 @@ int main() {
 	string header;
 	string **csvRows = new string*[MAX_DATA_SIZE];
 	int sizes[MAX_DATA_SIZE];
+	unsigned int *sizes2 = new unsigned int[MAX_DATA_SIZE];
 	ifstream reader("data.csv");
 	if (reader.is_open()) {
 		int i = 0;
@@ -155,7 +275,8 @@ int main() {
 			col[j] = string(start);
 			col[3].erase(0, 3);
 			col[3].erase(remove(col[3].begin(), col[3].end(), ' '), col[3].end());
-			sizes[i] = atoi(col[3].c_str());
+			sizes[i] = atoi(col[6].c_str());
+			//sizes2[i] = stoul(col[6], nullptr, 0);
 			csvRows[i] = col;
 			i++;
 		}
@@ -164,13 +285,16 @@ int main() {
 	reader.close();
 
 	chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-	radixsort(sizes, MAX_DATA_SIZE);
+	//countingSort(sizes, MAX_DATA_SIZE);
+	//radixsort(sizes, MAX_DATA_SIZE);
+	//RadixSort256(sizes2, MAX_DATA_SIZE);
+	//quickSort(sizes, 0, MAX_DATA_SIZE - 1);
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 	cout << chrono::duration_cast<chrono::microseconds>(end - begin).count() << " microseconds";
 
-	for (int i = 0; i < MAX_DATA_SIZE; i++) {
-		cout << sizes[i] << endl;
-	}
+	/*for (int i = 0; i < MAX_DATA_SIZE; i++) {
+		cout << sizes2[i] << endl;
+	}*/
 	/*string *firstRow = csvRows[19783];
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << firstRow[i] << endl;
