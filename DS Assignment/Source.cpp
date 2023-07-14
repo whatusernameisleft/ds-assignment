@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #include "Entry.hpp"
 #include "CSV.h"
 #include "HashTable.h"
@@ -10,6 +11,119 @@
 
 #define MAX_DATA_SIZE 19991
 #define COLUMN_COUNT 14
+#define RANGE 255
+
+// A utility function to get maximum
+// value in arr[]
+int getMax(int arr[], int n)
+{
+	int mx = arr[0];
+	for (int i = 1; i < n; i++)
+		if (arr[i] > mx)
+			mx = arr[i];
+	return mx;
+}
+
+// A function to do counting sort of arr[]
+// according to the digit
+// represented by exp.
+void countSort(int arr[], int n, int exp)
+{
+
+	// Output array
+	int *output = new int[n];
+	int i, count[10] = { 0 };
+
+	// Store count of occurrences
+	// in count[]
+	for (i = 0; i < n; i++)
+		count[(arr[i] / exp) % 10]++;
+
+	// Change count[i] so that count[i]
+	// now contains actual position
+	// of this digit in output[]
+	for (i = 1; i < 10; i++)
+		count[i] += count[i - 1];
+
+	// Build the output array
+	for (i = n - 1; i >= 0; i--) {
+		output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+		count[(arr[i] / exp) % 10]--;
+	}
+
+	// Copy the output array to arr[],
+	// so that arr[] now contains sorted
+	// numbers according to current digit
+	for (i = 0; i < n; i++)
+		arr[i] = output[i];
+}
+
+// The main function to that sorts arr[]
+// of size n using Radix Sort
+void radixsort(int arr[], int n)
+{
+
+	// Find the maximum number to
+	// know number of digits
+	int m = getMax(arr, n);
+
+	// Do counting sort for every digit.
+	// Note that instead of passing digit
+	// number, exp is passed. exp is 10^i
+	// where i is current digit number
+	for (int exp = 1; m / exp > 0; exp *= 10)
+		countSort(arr, n, exp);
+}
+
+void countingSort(int array[], int size) {
+	// The size of count must be at least the (max+1) but
+	// we cannot assign declare it as int count(max+1) in C++ as
+	// it does not support dynamic memory allocation.
+	// So, its size is provided statically.
+	int output[MAX_DATA_SIZE];
+	int count[MAX_DATA_SIZE];
+	int max = array[0];
+
+	// Find the largest element of the array
+	for (int i = 1; i < size; i++) {
+		if (array[i] > max)
+			max = array[i];
+	}
+
+	// Initialize count array with all zeros.
+	for (int i = 0; i <= max; ++i) {
+		count[i] = 0;
+	}
+
+	// Store the count of each element
+	for (int i = 0; i < size; i++) {
+		count[array[i]]++;
+	}
+
+	// Store the cummulative count of each array
+	for (int i = 1; i <= max; i++) {
+		count[i] += count[i - 1];
+	}
+
+	// Find the index of each element of the original array in count array, and
+	// place the elements in output array
+	for (int i = size - 1; i >= 0; i--) {
+		output[count[array[i]] - 1] = array[i];
+		count[array[i]]--;
+	}
+
+	// Copy the sorted elements into original array
+	for (int i = 0; i < size; i++) {
+		array[i] = output[i];
+	}
+}
+
+// Function to print an array
+void printArray(int array[], int size) {
+	for (int i = 0; i < size; i++)
+		cout << array[i] << " ";
+	cout << endl;
+}
 
 int main() {
 	char firstChar = 'a';
@@ -18,6 +132,7 @@ int main() {
 
 	string header;
 	string **csvRows = new string*[MAX_DATA_SIZE];
+	int sizes[MAX_DATA_SIZE];
 	ifstream reader("data.csv");
 	if (reader.is_open()) {
 		int i = 0;
@@ -38,6 +153,9 @@ int main() {
 				}
 			}
 			col[j] = string(start);
+			col[3].erase(0, 3);
+			col[3].erase(remove(col[3].begin(), col[3].end(), ' '), col[3].end());
+			sizes[i] = atoi(col[3].c_str());
 			csvRows[i] = col;
 			i++;
 		}
@@ -45,10 +163,18 @@ int main() {
 
 	reader.close();
 
-	string *firstRow = csvRows[19783];
+	chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+	radixsort(sizes, MAX_DATA_SIZE);
+	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	cout << chrono::duration_cast<chrono::microseconds>(end - begin).count() << " microseconds";
+
+	for (int i = 0; i < MAX_DATA_SIZE; i++) {
+		cout << sizes[i] << endl;
+	}
+	/*string *firstRow = csvRows[19783];
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << firstRow[i] << endl;
-	}
+	}*/
 
 	/*string header;
 	Vector<Vector<string>> csvRows;
