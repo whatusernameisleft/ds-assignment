@@ -1,14 +1,14 @@
 #pragma once
 
-#include <fstream>
 #include <future>
 #include "Vector.h"
 #include "Entry.h"
 
-#define COLUMN_COUNT 14
+extern const int MAX_DATA_SIZE;
+extern const int COLUMN_COUNT;
 
-Entry createEntry(string line) {
-	string *col = new string[COLUMN_COUNT];
+Entry createEntry(std::string line) {
+	std::string *col = new std::string[COLUMN_COUNT];
 	int i = 0;
 	const char *start = line.c_str();
 	bool instring{ false };
@@ -16,28 +16,26 @@ Entry createEntry(string line) {
 	for (const char *p = start; *p; p++) {
 		if (*p == '"') instring = !instring;
 		else if (*p == ',' && !instring) {
-			col[i] = string(start, p - start);
+			col[i] = std::string(start, p - start);
 			i++;
 			start = p + 1;
 		}
 	}
-	col[i] = string(start);
+	col[i] = std::string(start);
 	Entry entry(col);
 
 	return entry;
 }
 
-Vector<future<Entry>> readCSV(ifstream &in) {
-	Vector<future<Entry>> entries;
+Entry* readCSV(std::ifstream &in) {
+	Entry *entries = new Entry[MAX_DATA_SIZE];
+	int i = 0;
+	std::string line;
 
-	while (!in.eof() && !in.fail()) {
-		string line;
-		getline(in, line);
-		entries.push_back(async(
-			[](string data) {
-				return createEntry(data);
-			},
-			move(line)));
+	while (getline(in, line)) {
+		entries[i] = (createEntry(line));
+		i++;
 	}
+
 	return entries;
 }

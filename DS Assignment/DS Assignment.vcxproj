@@ -136,9 +136,13 @@
     <None Include="data.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Admin.h" />
     <ClInclude Include="CSV.h" />
     <ClInclude Include="Entry.h" />
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="Menus.h" />
     <ClInclude Include="Sorts.h" />
+    <ClInclude Include="Tenant.h" />
     <ClInclude Include="Trim.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

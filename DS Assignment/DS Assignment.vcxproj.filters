@@ -40,5 +40,17 @@
     <ClInclude Include="Sorts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tenant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

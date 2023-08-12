@@ -21,28 +21,27 @@ class Vector {
 		current = 0;
 	}
 
+	~Vector() {
+		delete[] arr;
+	}
+
 	void push_back(T data) {
 		if (current == capacity) {
 			T *temp = new T[2 * capacity];
 			for (int i = 0; i < capacity; i++) {
-				temp[i] = move(arr[i]);
+				temp[i] = arr[i];
 			}
 
 			delete[] arr;
 			capacity *= 2;
 			arr = temp;
 		}
-		arr[current] = move(data);
+		arr[current] = data;
 		current++;
 	}
 
-	void push(T data, int index) {
-		if (index == capacity) push_back(data);
-		else arr[index] = move(data);
-	}
-
 	T get(int index) {
-		if (index < current) return move(arr[index]);
+		if (index < current) return arr[index];
 	}
 
 	void pop_back() {
@@ -59,11 +58,5 @@ class Vector {
 
 	T *getValues() {
 		return arr;
-	}
-
-	void print() {
-		for (int i = 0; i < current; i++) {
-			cout << arr[i].get().name << endl;
-		}
 	}
 };

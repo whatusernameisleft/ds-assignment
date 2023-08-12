@@ -7,13 +7,13 @@
 	Code version: N/A
 	Availability: https://youtu.be/TPpWvpnQq5s
 */
-static void RadixSort256(unsigned int *arr, int n)
+static void RadixSortRent(Entry *arr, int n)
 {
 	if (n <= 1) return; // Added base case
 
-	unsigned int *output = new unsigned int[n]; // output array
+	Entry *output = new Entry[n]; // output array
 	int *count = new int[256];
-	unsigned int *originalArr = arr; // So we know which was input
+	Entry *originalArr = arr; // So we know which was input
 
 	for (int shift = 0, s = 0; shift < 4; shift++, s += 8)
 	{
@@ -23,7 +23,7 @@ static void RadixSort256(unsigned int *arr, int n)
 
 		// Store count of occurrences in count[] 
 		for (int i = 0; i < n; i++)
-			count[(arr[i] >> s) & 0xff]++;
+			count[(arr[i].rent >> s) & 0xff]++;
 
 		// Change count[i] so that count[i] now contains 
 		// actual position of this digit in output[] 
@@ -34,7 +34,7 @@ static void RadixSort256(unsigned int *arr, int n)
 		for (int i = n - 1; i >= 0; i--)
 		{
 			// precalculate the offset as it's a few instructions
-			int idx = (arr[i] >> s) & 0xff;
+			int idx = (arr[i].rent >> s) & 0xff;
 
 			// Subtract from the count and store the value
 			output[--count[idx]] = arr[i];
@@ -44,7 +44,7 @@ static void RadixSort256(unsigned int *arr, int n)
 		// is sorted according to current digit
 
 		// We can just swap the pointers
-		unsigned int *tmp = arr;
+		Entry *tmp = arr;
 		arr = output;
 		output = tmp;
 	}
@@ -53,7 +53,7 @@ static void RadixSort256(unsigned int *arr, int n)
 	// make sure we copy before returning
 	if (originalArr == output)
 	{
-		unsigned int *tmp = arr;
+		Entry *tmp = arr;
 		arr = output;
 		output = tmp;
 
