@@ -47,7 +47,7 @@ void LoginManager(Manager *managerList) {
     }
 
     if (!loggedIn) {
-        std::cout << "Failed to log in. Wrong ID/Password." << std::endl;
+        std::cout << "Failed to log in. Wrong ID or Password." << std::endl;
         loginManagerStatus = false; // Login failed
     }
 }
@@ -82,17 +82,19 @@ void displayTenantList(Tenant *head) {
         std::cout << "Tenant ID: " << current->tenantID << "\tPassword: " << current->password << std::endl;
         current = current->next;
     }
+    std::cout << std::endl;
 }
 
-void displayInactiveTenants(Tenant *head) {
+void displayFilteredTenants(Tenant *head, std::string status) {
     Tenant *current = head;
-    std::cout << "List of inactive tenants: " << std::endl;
+    std::cout << "List of " << status << " tenants: " << std::endl;
     while (current != nullptr) {
-        if (current->status == "inactive") {
+        if (current->status == status) {
             std::cout << "Tenant ID: " << current->tenantID << "\tPassword: " << current->password << std::endl;
         }
         current = current->next;
     }
+    std::cout << std::endl;
 }
 
 bool searchTenantList(Tenant *head) {
@@ -114,7 +116,7 @@ bool searchTenantList(Tenant *head) {
 
 //only allowed to delete inactive tenants
 void deleteTenant(Tenant **head) {
-    displayInactiveTenants(*head);
+    displayFilteredTenants(*head, "inactive");
     std::string tenantID;
     std::cout << "Enter tenant ID: ";
     std::cin >> tenantID;

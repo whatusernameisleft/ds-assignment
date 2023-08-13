@@ -8,6 +8,7 @@
 #include "CSV.h"
 #include "Vector.h"
 #include "Sorts.h"
+#include "Searches.h"
 #include "Tenant.h"
 #include "Manager.h"
 #include "Admin.h"
@@ -46,19 +47,19 @@ Entry* init() {
     addfavProperty(&favList, "t6", "3");
 
     //adding rent requests
-    addRentrequest(&requestList, "t1", "1", "pending");
-    addRentrequest(&requestList, "t6", "10", "pending");
-    addRentrequest(&requestList, "t5", "999", "pending");
-    addRentrequest(&requestList, "t2", "666", "pending");
-    addRentrequest(&requestList, "t4", "555", "rejected");
-    addRentrequest(&requestList, "t3", "111", "approved");
+    addRentrequest(&requestList, "t1", "100495581", "pending");
+    addRentrequest(&requestList, "t6", "100496470", "pending");
+    addRentrequest(&requestList, "t5", "99546836", "pending");
+    addRentrequest(&requestList, "t2", "100062628", "pending");
+    addRentrequest(&requestList, "t4", "100322897", "rejected");
+    addRentrequest(&requestList, "t3", "100322100", "approved");
 
     //adding manager data
     addManager(&managerList, "m1", "1", true);
     addManager(&managerList, "m2", "2", false);
     addManager(&managerList, "m3", "3", true);
 
-    //adding tenantpayment data
+    //adding tenant payment data
     addTenantPayment(&tenantPaymentList, "t1", "p1", "Paid");
     addTenantPayment(&tenantPaymentList, "t6", "p89", "Paid");
     addTenantPayment(&tenantPaymentList, "t5", "p10", "Paid");
@@ -70,15 +71,15 @@ Entry* init() {
     addAdmin(&adminList, "A1", "1");
 
     //adding tenant rent history data
-    addHistoryRecord(&historyList, "t1", "012930", 18);
-    addHistoryRecord(&historyList, "t1", "930", 10);
-    addHistoryRecord(&historyList, "t2", "012930", 5);
-    addHistoryRecord(&historyList, "t3", "012930", 18);
-    addHistoryRecord(&historyList, "t5", "10", 18);
-    addHistoryRecord(&historyList, "t4", "930", 18);
-    addHistoryRecord(&historyList, "t4", "30", 18);
-    addHistoryRecord(&historyList, "t1", "99930", 34);
-    addHistoryRecord(&historyList, "t1", "90", 3);
+    addHistoryRecord(&historyList, "t1", "100273689", 18);
+    addHistoryRecord(&historyList, "t1", "95865588", 10);
+    addHistoryRecord(&historyList, "t2", "100235780", 5);
+    addHistoryRecord(&historyList, "t3", "100213851", 18);
+    addHistoryRecord(&historyList, "t5", "100322311", 18);
+    addHistoryRecord(&historyList, "t4", "94341323", 18);
+    addHistoryRecord(&historyList, "t4", "100784943", 18);
+    addHistoryRecord(&historyList, "t1", "100707777", 34);
+    addHistoryRecord(&historyList, "t1", "100613911", 3);
 
     return entries;
 }
@@ -101,7 +102,7 @@ int main() {
         switch (option) {
         case 1:
             cls();
-            tenantMenu();
+            tenantMenu(entries);
             break;
         case 2:
             cls();
@@ -111,7 +112,7 @@ int main() {
         case 3:
             //open admin page
             cls();
-            AdminMenu();
+            AdminMenu(entries);
             break;
         case 0:
             std::cout << "Exited program. Thank You.";
@@ -121,12 +122,6 @@ int main() {
             break;
         }
     } while (option != 0);
-
-
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	RadixSortRent(entries, MAX_DATA_SIZE);
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << " milliseconds" << std::endl;
 
 	delete[] entries;
 	return 0;

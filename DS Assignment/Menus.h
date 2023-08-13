@@ -1,7 +1,7 @@
 #pragma once
 
 //tenant user's menu
-void tenantMenu() {
+void tenantMenu(Entry *entries) {
     int Toption;//T: tenant option
     do {
         std::cout << "---------------------------Asia Pacific Home---------------------------" << std::endl;
@@ -14,45 +14,46 @@ void tenantMenu() {
 
         switch (Toption) {
         case 1:
-            if (loginTenantStatus) {
+            if (loginTenantStatus)
                 std::cout << "Already logged in as " << LoggedInTenant << std::endl;
-            } else {
+            else
                 LoginTenant(tenantList);
-            }
             break;
         case 2:
-            //open sort page
+            if (loginTenantStatus)
+                sortProperties(entries);
+            else
+                std::cout << "Log in to sort properties." << std::endl;
             break;
         case 3:
-            //open search page
+            if (loginTenantStatus)
+                searchProperties(entries);
+            else
+                std::cout << "Log in to search for properties." << std::endl;
             break;
         case 4:
-            if (!loginTenantStatus) {
+            if (!loginTenantStatus)
                 registerTenant(&tenantList);
-            } else {
+            else 
                 std::cout << "Log out to register" << std::endl;
-            }
             break;
         case 5:
-            if (loginTenantStatus) {
+            if (loginTenantStatus) 
                 addToFavPropList(&favList);
-            } else {
+            else
                 std::cout << "Log in to add property to favourite list. " << std::endl;
-            }
             break;
         case 6:
-            if (loginTenantStatus) {
+            if (loginTenantStatus) 
                 makeRentrequest(&requestList);
-            } else {
+            else
                 std::cout << "Log in to make rent property request. " << std::endl;
-            }
             break;
         case 7:
-            if (loginTenantStatus) {
+            if (loginTenantStatus)
                 displayTenantRentHistory(historyList);
-            } else {
+            else
                 std::cout << "Log in to display rent history. " << std::endl;
-            }
             break;
         case 0:
             logOutTenant();
@@ -82,56 +83,49 @@ void managerMenu() {
             LogoutManager();
             return;
         case 1:
-            if (!loginManagerStatus) {
+            if (!loginManagerStatus)
                 LoginManager(managerList);
-            } else {
+            else
                 std::cout << "Already logged in." << std::endl;
-            }
             break;
         case 2:
-            if (loginManagerStatus) {
+            if (loginManagerStatus)
                 displayTenantList(tenantList);
-            } else {
+            else
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         case 3:
-            if (loginManagerStatus) {
+            if (loginManagerStatus)
                 searchTenantList(tenantList);
-            } else {
+            else
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         case 4:
-            if (loginManagerStatus) {
+            if (loginManagerStatus)
                 deleteTenant(&tenantList);
-            } else {
+            else
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         case 5:
-            if (loginManagerStatus) {
+            if (loginManagerStatus)
                 printSummaryProp(favList);
-            } else {
+            else
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         case 6:
             if (loginManagerStatus) {
                 displayRentRequests(requestList);
                 updateRentStatus(requestList);
-            } else {
+            } else
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         case 7:
             if (loginManagerStatus) {
                 displayPayment(tenantPaymentList);
                 managePay(tenantPaymentList);
                 displayPayment(tenantPaymentList);
-            } else {
+            } else 
                 std::cout << "Did not login. Please login to use menu functions." << std::endl;
-            }
             break;
         default:
             std::cout << "Invalid input. Please enter a valid option." << std::endl;
@@ -141,34 +135,35 @@ void managerMenu() {
 }
 
 //Admin user's menu
-void AdminMenu() {
+void AdminMenu(Entry *entries) {
     int Aoption; //A=admin options
     do {
         std::cout << "---------------------------Asia Pacific Home---------------------------" << std::endl;
         std::cout << "                               <<Admin>>" << std::endl;
         std::cout << "Options:" << std::endl;
-        std::cout << "    1. Login\n    2. Manage Managers\n    3. List tenant and properties.\n    0. Logout & Exit" << std::endl;
+        std::cout << "    1. Login\n    2. Manage Managers\n    3. List tenant and properties\n    0. Logout & Exit" << std::endl;
         std::cout << "\nChoose an option: ";
         std::cin >> Aoption;
         cls();
 
         switch (Aoption) {
         case 1:
-            if (loginAdminStatus) {
+            if (loginAdminStatus)
                 std::cout << "Already Logged in" << std::endl;
-            } else {
+            else
                 LoginAdmin(adminList);
-            }
             break;
         case 2:
-            if (loginAdminStatus) {
+            if (loginAdminStatus) 
                 manageManager();
-            } else {
+            else 
                 std::cout << "You must be logged in as admin to update manager status." << std::endl;
-            }
             break;
         case 3:
-            //Function for that
+            if (loginAdminStatus)
+                displayAllInfo(tenantList, entries);
+            else
+                std::cout << "You must be logged in as admin to view all tenant and property information." << std::endl;
             break;
         case 0:
             LogoutAdmin();

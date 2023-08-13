@@ -33,7 +33,7 @@ void LoginAdmin(Admin *adminList) {
 
 void LogoutAdmin() {
     loginAdminStatus = false;
-    std::cout << "Logged out Admin." << std::endl;
+    std::cout << "Logged out successfully." << std::endl;
 }
 
 void addAdmin(Admin **head, std::string adminID, std::string password) {
@@ -55,7 +55,7 @@ void addAdmin(Admin **head, std::string adminID, std::string password) {
 
 void updateManagerStatus(Manager *head) {
     std::string managerID;
-    std::cout << "Enter managerID to update status: ";
+    std::cout << "Enter manager ID to update status: ";
     std::cin >> managerID;
 
     bool newStatus;
@@ -123,8 +123,8 @@ void displayManager(Manager *head) {
     Manager *current = head;
     while (current != nullptr) {
         std::cout << "Manager ID: " << current->managerID
-            << ", Password: " << current->password
-            << "Manager status" << current->managerStatus << std::endl;
+            << "\tPassword: " << current->password
+            << "\tStatus: " << current->managerStatus << std::endl;
         current = current->next;
     }
 }
@@ -133,10 +133,10 @@ void manageManager() {
     int option;
     do {
         std::cout << "Admin's Manager Management Menu Options:\n"
-            << "1. Add Manager User\n"
-            << "2. Update Manager Status\n"
-            << "0. Return to Admin Menu\n"
-            << "Enter option: ";
+            << "    1. Add Manager User\n"
+            << "    2. Update Manager Status\n"
+            << "    0. Go back\n\n"
+            << "Choose an option: ";
         std::cin >> option;
         cls();
 
@@ -146,12 +146,8 @@ void manageManager() {
             addNewManagerList(&managerList);
             break;
         case 2:
-            if (loginAdminStatus) {
-                displayManager(managerList);
-                updateManagerStatus(managerList);
-            } else {
-                std::cout << "You must be logged in as admin to update manager status." << std::endl;
-            }
+            displayManager(managerList);
+            updateManagerStatus(managerList);
             break;
         case 0:
             return;
@@ -161,6 +157,204 @@ void manageManager() {
         }
         cls();
     } while (option != 0);
+}
+
+void displayAllTenants(Tenant *tenantList) {
+    std::cout << "Display All Tenant Information Options:\n"
+        << "    1. All\n"
+        << "    2. Active\n"
+        << "    3. Inactive\n"
+        << "    0. Go back\n\n"
+        << "Choose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    switch (option) {
+    case 1:
+        displayTenantList(tenantList);
+        break;
+    case 2:
+        displayFilteredTenants(tenantList, "active");
+        break;
+    case 3:
+        displayFilteredTenants(tenantList, "inactive");
+        break;
+    case 0:
+        return;
+    default:
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+}
+
+void displayByPropertyType(Entry *entries) {
+    std::string propertyTypes[13] = {
+        "Apartment",
+        "Bungalow House",
+        "Condo / Services residence / Penthouse / Townhouse",
+        "Condominium",
+        "Duplex",
+        "Flat",
+        "Houses",
+        "Others",
+        "Residential",
+        "Service Residence",
+        "Soho",
+        "Studio",
+        "Townhouse Condo"
+    };
+
+    std::cout << "Display By Property Type Options:" << std::endl;
+    for (int i = 0; i < 13; i++)
+        std::cout << "    " << i + 1 << ". " << propertyTypes[i] << std::endl;
+    std::cout << "    0. Go back" << std::endl;
+    std::cout << "\nChoose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    if (option == 0)
+        return;
+    else if (option < 0 || option > 13) {
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+
+    std::string type = propertyTypes[option - 1];
+    int count = 0;
+    std::cout << "First 10 property IDs for " << type << ": " << std::endl;
+    for (int i = 0; i < MAX_DATA_SIZE && count != 10; i++) {
+        if (entries[i].type == type) {
+            std::cout << entries[i].id << std::endl;
+            count++;
+        }
+    }
+    std::cout << std::endl;
+}
+
+void displayByFurnishStatus(Entry *entries) {
+    std::string furnishStatus[3] = {
+        "Fully Furnished",
+        "Partially Furnished",
+        "Not Furnished"
+    };
+
+    std::cout << "Display By Furnish Status Options:" << std::endl;
+    for (int i = 0; i < 3; i++)
+        std::cout << "    " << i + 1 << ". " << furnishStatus[i] << std::endl;
+    std::cout << "    0. Go back" << std::endl;
+    std::cout << "\nChoose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    if (option == 0)
+        return;
+    else if (option < 0 || option > 3) {
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+
+    std::string status = furnishStatus[option - 1];
+    int count = 0;
+    std::cout << "First 10 property IDs for " << status << ": " << std::endl;
+    for (int i = 0; i < MAX_DATA_SIZE && count != 10; i++) {
+        if (entries[i].furnished == status) {
+            std::cout << entries[i].id << std::endl;
+            count++;
+        }
+    }
+    std::cout << std::endl;
+}
+
+void displayByRegion(Entry *entries) {
+    std::string regions[2] = {
+           "Kuala Lumpur",
+           "Selangor"
+    };
+
+    std::cout << "Display By Region Options:" << std::endl;
+    for (int i = 0; i < 2; i++)
+        std::cout << "    " << i + 1 << ". " << regions[i] << std::endl;
+    std::cout << "    0. Go back" << std::endl;
+    std::cout << "\nChoose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    if (option == 0)
+        return;
+    else if (option < 0 || option > 2) {
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+
+    std::string region = regions[option - 1];
+    int count = 0;
+    std::cout << "First 10 property IDs for " << region << ": " << std::endl;
+    for (int i = 0; i < MAX_DATA_SIZE && count != 10; i++) {
+        if (entries[i].region == region) {
+            std::cout << entries[i].id << std::endl;
+            count++;
+        }
+    }
+    std::cout << std::endl;
+}
+
+void displayAllProperties(Entry *entries) {
+    std::cout << "Display All Property Information Options:\n"
+        << "    1. Property Type\n"
+        << "    2. Furnish Status\n"
+        << "    3. Region\n"
+        << "    0. Go back\n\n"
+        << "Choose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    switch (option) {
+    case 1:
+        displayByPropertyType(entries);
+        break;
+    case 2:
+        displayByFurnishStatus(entries);
+        break;
+    case 3:
+        displayByRegion(entries);
+        break;
+    case 0:
+        return;
+    default:
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+}
+
+void displayAllInfo(Tenant *tenantList, Entry *entries) {
+    std::cout << "Display All Information Options:\n"
+        << "    1. Tenant\n"
+        << "    2. Property\n"
+        << "    0. Go back\n\n"
+        << "Choose an option: ";
+    int option;
+    std::cin >> option;
+    cls();
+
+    switch (option) {
+    case 1:
+        displayAllTenants(tenantList);
+        break;
+    case 2:
+        displayAllProperties(entries);
+        break;
+    case 0:
+        return;
+    default:
+        std::cout << "Invalid input." << std::endl;
+        return;
+    }
+
 }
 
 //creating the list
