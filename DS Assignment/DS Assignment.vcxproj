@@ -144,6 +144,7 @@
     <ClInclude Include="Searches.h" />
     <ClInclude Include="Sorts.h" />
     <ClInclude Include="Tenant.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

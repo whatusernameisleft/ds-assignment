@@ -1,7 +1,6 @@
 #pragma once
 
 #include <future>
-#include "Vector.h"
 #include "Entry.h"
 
 extern const int MAX_DATA_SIZE;

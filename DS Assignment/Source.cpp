@@ -6,6 +6,7 @@
 #include <chrono>
 #include "Entry.h"
 #include "CSV.h"
+#include "Vector.h"
 #include "Sorts.h"
 #include "Searches.h"
 #include "Tenant.h"
