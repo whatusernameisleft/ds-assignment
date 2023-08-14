@@ -31,12 +31,6 @@
     <ClInclude Include="CSV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Trim.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sorts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
