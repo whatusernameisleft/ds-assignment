@@ -21,11 +21,6 @@ struct Entry {
 	std::string facilities;
 	std::string additionalFacilities;
 
-	void setName(std::string s) {
-		std::string names[2] = { s, "N/A" };
-		name = names[s.empty()];
-	}
-
 	void setRent(std::string s) {
 		s.erase(0, 3);
 		s.erase(remove(s.begin(), s.end(), ' '), s.end());
@@ -41,27 +36,20 @@ struct Entry {
 
 	void setRooms(std::string s) {
 		bool gtet = s.length() >= 2;
-		bool empty = s.length() == 0;
+		bool empty = s.empty();
 		rooms = stoul(s.substr(s.length() - (1 + gtet - empty)) + char('0' * empty), nullptr, 0);
 		bool gtt = s.length() > 2;
 		rooms += (gtet && gtt) * greaterThanChar;
 	}
 
-	void setFurnished(std::string s) {
-		std::string statuses[2] = { s, "N/A" };
-		furnished = statuses[s.empty()];
-	}
-
 	void setFacilities(std::string s) {
 		s.erase(remove(s.begin(), s.end(), '"'), s.end());
-		std::string facilityTable[2] = { s, "N/A" };
-		facilities = facilityTable[s.empty()];
+		facilities = s.empty() ? "N/A" : s;
 	}
 
 	void setAdditionalFacilities(std::string s) {
 		s.erase(remove(s.begin(), s.end(), '"'), s.end());
-		std::string facilityTable[2] = { s, "N/A" };
-		additionalFacilities = facilityTable[s.empty()];
+		additionalFacilities = s.empty() ? "N/A" : s;
 	}
 
 	std::string getYear() {
@@ -81,12 +69,8 @@ struct Entry {
 	std::string getRooms() {
 		char symbol = (rooms > greaterThanChar) * greaterThanChar;
 		int roomInt = (rooms < greaterThanChar) * rooms + (rooms > greaterThanChar) * (rooms - greaterThanChar);
-		std::string roomString = std::to_string(roomInt);
-		std::string roomTable[2] = {roomString, "N/A"};
-		std::ostringstream oss;
-		oss << symbol << roomTable[roomString.empty()];
 
-		return oss.str();
+		return "" + symbol + (roomInt == 0 ? "N/A" : std::to_string(roomInt));
 	}
 
 	std::string getParking() {
@@ -124,7 +108,7 @@ struct Entry {
 
 	Entry(std::string *col) {
 		id = stoul(col[0], nullptr, 0);
-		setName(col[1]);
+		name = col[1].empty() ? "N/A" : col[1];
 		year = stoul(col[2] + char('0' * col[2].empty()), nullptr, 0);
 		setRent(col[3]);
 		setRegionAndLocation(col[4]);
@@ -133,7 +117,7 @@ struct Entry {
 		parking = stoul(col[7] + char('0' * col[7].empty()), nullptr, 0);
 		bathrooms = stoul(col[8] + char('0' * col[8].empty()), nullptr, 0);
 		size = stoul(col[9], nullptr, 0);
-		setFurnished(col[10]);
+		furnished = col[10].empty() ? "N/A" : col[10];
 		setFacilities(col[11]);
 		setAdditionalFacilities(col[12]);
 	}

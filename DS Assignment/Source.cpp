@@ -26,7 +26,7 @@ Entry* init() {
     }
     std::string header;
     getline(reader, header);
-    auto entries = readCSV(reader);
+    Entry *entries = readCSV(reader);
     reader.close();
 
     //adding all data to all the lists for demonstration purpose
@@ -87,7 +87,7 @@ Entry* init() {
 int main() {
     Entry *entries = init();
     if (entries == nullptr)
-        return -1;
+        return 1;
 
     int option;
     do {
