@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-	Title: Why is Radix Sort so Fast? Part 3 Comparison and Code, Radix Sort vs QuickSort
+	Title: Radix Sort Source Code
 	Author: Creel
 	Date: 2020
 	Code version: N/A

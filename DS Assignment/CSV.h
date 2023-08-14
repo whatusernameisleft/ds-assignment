@@ -6,7 +6,7 @@ extern const int MAX_DATA_SIZE;
 extern const int COLUMN_COUNT;
 
 /*
-	Title: C++ CSV line with commas and strings within double quotes
+	Title: CSV Parser Source Code
 	Author: Christophe
 	Date: 2016
 	Code version: N/A

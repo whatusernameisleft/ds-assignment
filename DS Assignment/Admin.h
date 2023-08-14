@@ -119,7 +119,7 @@ void addNewManagerList(Manager **head) {
     }
 }
 void displayManager(Manager *head) {
-    std::cout << "Rent Requests:" << std::endl;
+    std::cout << "Existing Managers:" << std::endl;
     Manager *current = head;
     while (current != nullptr) {
         std::cout << "Manager ID: " << current->managerID

@@ -69,8 +69,9 @@ struct Entry {
 	std::string getRooms() {
 		char symbol = (rooms > greaterThanChar) * greaterThanChar;
 		int roomInt = (rooms < greaterThanChar) * rooms + (rooms > greaterThanChar) * (rooms - greaterThanChar);
+		std::string roomString = (roomInt == 0) ? "N/A" : std::to_string(roomInt);
 
-		return "" + symbol + (roomInt == 0 ? "N/A" : std::to_string(roomInt));
+		return symbol + roomString;
 	}
 
 	std::string getParking() {

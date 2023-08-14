@@ -6,7 +6,6 @@
 #include <chrono>
 #include "Entry.h"
 #include "CSV.h"
-#include "Vector.h"
 #include "Sorts.h"
 #include "Searches.h"
 #include "Tenant.h"
@@ -60,12 +59,12 @@ Entry* init() {
     addManager(&managerList, "m3", "3", true);
 
     //adding tenant payment data
-    addTenantPayment(&tenantPaymentList, "t1", "p1", "Paid");
-    addTenantPayment(&tenantPaymentList, "t6", "p89", "Paid");
-    addTenantPayment(&tenantPaymentList, "t5", "p10", "Paid");
-    addTenantPayment(&tenantPaymentList, "t4", "p70", "Unpaid");
-    addTenantPayment(&tenantPaymentList, "t3", "p69", "Unpaid");
-    addTenantPayment(&tenantPaymentList, "t2", "p11", "Unpaid");
+    addTenantPayment(&tenantPaymentList, "t1", "100495581", "Paid");
+    addTenantPayment(&tenantPaymentList, "t6", "100496470", "Paid");
+    addTenantPayment(&tenantPaymentList, "t5", "99546836", "Paid");
+    addTenantPayment(&tenantPaymentList, "t4", "100062628", "Unpaid");
+    addTenantPayment(&tenantPaymentList, "t3", "100322897", "Unpaid");
+    addTenantPayment(&tenantPaymentList, "t2", "100322100", "Unpaid");
 
     //adding admin user data
     addAdmin(&adminList, "A1", "1");

@@ -1,7 +1,8 @@
 #pragma once
 
-bool loginManagerStatus = false;//to hold manager login status. set to false so that the start state is nobody is logged in.
+#include "Vector.h"
 
+bool loginManagerStatus = false;//to hold manager login status. set to false so that the start state is nobody is logged in.
 
 //All list that manager uses
 struct Manager {
@@ -79,7 +80,7 @@ void displayTenantList(Tenant *head) {
     Tenant *current = head;
     std::cout << "List of registered tenants: " << std::endl;
     while (current != nullptr) {
-        std::cout << "Tenant ID: " << current->tenantID << "\tPassword: " << current->password << std::endl;
+        std::cout << "Tenant ID: " << current->tenantID << "\tPassword: " << current->password << "\tStatus: " << current->status << std::endl;
         current = current->next;
     }
     std::cout << std::endl;

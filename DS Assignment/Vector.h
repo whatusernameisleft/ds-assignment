@@ -1,14 +1,12 @@
 #pragma once
 
 /*
-	Title: How to implement our own Vector Class in C++?
-	Author : mv15
+	Title: Vector Source Code
+	Author : GeeksforGeeks
 	Date : 2022
 	Code version : N/A
 	Availability : https://www.geeksforgeeks.org/how-to-implement-our-own-vector-class-in-c/
 */
-
-#pragma once
 
 template <typename T>
 class Vector {
@@ -56,9 +54,5 @@ class Vector {
 
 	int getCapacity() {
 		return capacity;
-	}
-
-	T *getValues() {
-		return arr;
 	}
 };
